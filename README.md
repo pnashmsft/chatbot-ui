@@ -83,7 +83,7 @@ When deploying the application, the following environment variables can be set:
 | Environment Variable              | Default value                  | Description                                                                                                                               |
 | --------------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | OPENAI_API_KEY                    |                                | The default API key used for authentication with OpenAI                                                                                   |
-| OPENAI_API_HOST                   | `https://api.openai.com`       | The base url, for Azure use `https://<endpoint>.openai.azure.com`                                                                         |
+| OPENAI_API_HOST                   | `https://api.openai.com`       | The base url, for Azure use `https://<endpoint>.openai.azure.com`. If using APIM enter the URI of the APIM instance                              |
 | OPENAI_API_TYPE                   | `openai`                       | The API type, options are `openai` or `azure`                                                                                             |
 | OPENAI_API_VERSION                | `2023-03-15-preview`           | Only applicable for Azure OpenAI                                                                                                          |
 | AZURE_DEPLOYMENT_ID               |                                | Needed when Azure OpenAI, Ref [Azure OpenAI API](https://learn.microsoft.com/zh-cn/azure/cognitive-services/openai/reference#completions) |
@@ -93,6 +93,8 @@ When deploying the application, the following environment variables can be set:
 | NEXT_PUBLIC_DEFAULT_TEMPERATURE   | 1                              | The default temperature to use on new conversations                                                                                       |
 | GOOGLE_API_KEY                    |                                | See [Custom Search JSON API documentation][GCSE]                                                                                          |
 | GOOGLE_CSE_ID                     |                                | See [Custom Search JSON API documentation][GCSE]                                                                                          |
+| AZURE_APIM_KEY | | Required if using APIM. 
+| NODE_TLS_REJECT_UNAUTHORIZED | | Set to `0` if using a self signed cert to prevent TLS errors.
 
 If you do not provide an OpenAI API key with `OPENAI_API_KEY`, users will have to provide their own key.
 

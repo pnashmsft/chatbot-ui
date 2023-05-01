@@ -17,7 +17,7 @@ const handler = async (req: Request): Promise<Response> => {
       url = `${OPENAI_API_HOST}/openai/deployments?api-version=${OPENAI_API_VERSION}`;
     }
 
-    console.log("load the models");
+    console.log("load the models: " + url) ;
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
