@@ -19,3 +19,5 @@ export const OPENAI_ORGANIZATION =
 
 export const AZURE_DEPLOYMENT_ID =
   process.env.AZURE_DEPLOYMENT_ID || '';
+
+export const AZURE_APIM = process.env.AZURE_APIM_KEY || false

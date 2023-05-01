@@ -1,7 +1,7 @@
 import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
-import { AZURE_DEPLOYMENT_ID, OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '../app/const';
+import { AZURE_DEPLOYMENT_ID, OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION, AZURE_APIM } from '../app/const';
 
 import {
   ParsedEvent,
@@ -33,6 +33,7 @@ export const OpenAIStream = async (
   let url = `${OPENAI_API_HOST}/v1/chat/completions`;
   if (OPENAI_API_TYPE === 'azure') {
     url = `${OPENAI_API_HOST}/openai/deployments/${AZURE_DEPLOYMENT_ID}/chat/completions?api-version=${OPENAI_API_VERSION}`;
+    console.log(url);
   }
   const res = await fetch(url, {
     headers: {
@@ -45,6 +46,9 @@ export const OpenAIStream = async (
       }),
       ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
         'OpenAI-Organization': OPENAI_ORGANIZATION,
+      }),
+      ...((AZURE_APIM) && {
+        'Ocp-Apim-Subscription-Key': process.env.AZURE_APIM_KEY
       }),
     },
     method: 'POST',
@@ -66,9 +70,12 @@ export const OpenAIStream = async (
   const encoder = new TextEncoder();
   const decoder = new TextDecoder();
 
+  console.debug("get Chat");
   if (res.status !== 200) {
     const result = await res.json();
     if (result.error) {
+      
+      console.debug("Got a Chat Error: " + result.error.message);
       throw new OpenAIError(
         result.error.message,
         result.error.type,
@@ -76,6 +83,7 @@ export const OpenAIStream = async (
         result.error.code,
       );
     } else {
+      console.debug("Got a Chat Error: " + result.statusText);
       throw new Error(
         `OpenAI API returned an error: ${
           decoder.decode(result?.value) || result.statusText
@@ -84,6 +92,7 @@ export const OpenAIStream = async (
     }
   }
 
+  console.debug("got Chat");
   const stream = new ReadableStream({
     async start(controller) {
       const onParse = (event: ParsedEvent | ReconnectInterval) => {

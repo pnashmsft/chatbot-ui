@@ -1,4 +1,4 @@
-import { OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION } from '@/utils/app/const';
+import { OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION, AZURE_APIM } from '@/utils/app/const';
 
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
 
@@ -17,6 +17,7 @@ const handler = async (req: Request): Promise<Response> => {
       url = `${OPENAI_API_HOST}/openai/deployments?api-version=${OPENAI_API_VERSION}`;
     }
 
+    console.log("load the models");
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -29,6 +30,9 @@ const handler = async (req: Request): Promise<Response> => {
         ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
           'OpenAI-Organization': OPENAI_ORGANIZATION,
         }),
+        ...((AZURE_APIM) && {
+          'Ocp-Apim-Subscription-Key': process.env.AZURE_APIM_KEY
+        })
       },
     });
 
@@ -39,8 +43,7 @@ const handler = async (req: Request): Promise<Response> => {
       });
     } else if (response.status !== 200) {
       console.error(
-        `OpenAI API returned an error ${
-          response.status
+        `OpenAI API returned an error ${response.status
         }: ${await response.text()}`,
       );
       throw new Error('OpenAI API returned an error');
@@ -61,7 +64,7 @@ const handler = async (req: Request): Promise<Response> => {
         }
       })
       .filter(Boolean);
-
+      console.log("loaded models");
     return new Response(JSON.stringify(models), { status: 200 });
   } catch (error) {
     console.error(error);
