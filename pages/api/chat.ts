@@ -49,10 +49,13 @@ const handler = async (req: Request): Promise<Response> => {
       tokenCount += tokens.length;
       messagesToSend = [message, ...messagesToSend];
     }
-    console.log(req.headers);
+    var principalName:string|null = req.headers.get("x-ms-client-principal-name")
+    var bearer:string|null =req.headers.get("x-ms-token-aad-access-token")
+    console.log(principalName);
+    console.log(bearer);
     encoding.free();
 
-    const stream = await OpenAIStream(model, promptToSend, temperatureToUse, key, messagesToSend);
+    const stream = await OpenAIStream(model, promptToSend, temperatureToUse, key, messagesToSend, principalName, bearer );
 
     return new Response(stream);
   } catch (error) {

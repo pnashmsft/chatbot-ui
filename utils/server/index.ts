@@ -29,6 +29,8 @@ export const OpenAIStream = async (
   temperature : number,
   key: string,
   messages: Message[],
+  principalName: string|null,
+  bearer: string|null
 ) => {
   let url = `${OPENAI_API_HOST}/v1/chat/completions`;
   if (OPENAI_API_TYPE === 'azure') {
@@ -50,6 +52,12 @@ export const OpenAIStream = async (
       ...((AZURE_APIM) && {
         'Ocp-Apim-Subscription-Key': process.env.AZURE_APIM_KEY
       }),
+      ...((principalName) && {
+        'x-ms-client-principal-name': principalName
+      }),
+      ...((bearer) && { 
+        'Authorization': 'Bearer ' + bearer
+      })
     },
     method: 'POST',
     body: JSON.stringify({
