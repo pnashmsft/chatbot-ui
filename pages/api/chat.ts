@@ -49,7 +49,7 @@ const handler = async (req: Request): Promise<Response> => {
       tokenCount += tokens.length;
       messagesToSend = [message, ...messagesToSend];
     }
-
+    console.log(req.headers);
     encoding.free();
 
     const stream = await OpenAIStream(model, promptToSend, temperatureToUse, key, messagesToSend);
