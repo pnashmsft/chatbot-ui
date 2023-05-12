@@ -114,7 +114,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: ${{ env.GOV_CHAT_WEBAPP_NAME }}
           images: 'crartgovchat01.azurecr.io/chat:${{ github.sha }}'
 
   deploy-gov-chat-simp:
@@ -140,5 +140,5 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: ${{ env.GOV_SIMP_WEBAPP_NAME }}
           images: 'crgovchatsimp01.azurecr.io/chat:${{ github.sha }}'
