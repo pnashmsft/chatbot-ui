@@ -2,6 +2,8 @@ name: Build and deploy a container to an Azure Web App
 
 env:
   AZURE_WEBAPP_NAME: wa-chatbot-897598   # set this to your application's name
+  GOV_CHAT_WEBAPP_NAME: coeart-govchat01   # set this to your application's name
+  GOV_SIMP_WEBAPP_NAME: coeart-govchat-simple-02   # set this to your application's name
 
 on:
   push:
