@@ -49,6 +49,8 @@ const handler = async (req: Request): Promise<Response> => {
       tokenCount += tokens.length;
       messagesToSend = [message, ...messagesToSend];
     }
+    console.log("!!!HEADERS!!!");
+    console.log(req.headers);
     var principalName:string|null = req.headers.get("x-ms-client-principal-name")
     var bearer:string|null =req.headers.get("x-ms-token-aad-access-token")
     console.log(principalName);
