@@ -30,7 +30,8 @@ export const OpenAIStream = async (
   key: string,
   messages: Message[],
   principalName: string|null,
-  bearer: string|null
+  bearer: string|null,
+  bearerAuth: string|null
 ) => {
   let url = `${OPENAI_API_HOST}/v1/chat/completions`;
   if (OPENAI_API_TYPE === 'azure') {
@@ -56,6 +57,12 @@ export const OpenAIStream = async (
     }),
     ...((bearer) && { 
       'Authorization': 'Bearer ' + bearer
+    }),
+    ...((bearer) && { 
+      'x-ms-client-principal': bearer
+    }),
+    ...((bearerAuth) && { 
+      'x-ms-client-principal-id': bearerAuth
     })
   };
   const body = {

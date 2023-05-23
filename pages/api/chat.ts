@@ -58,7 +58,7 @@ const handler = async (req: Request): Promise<Response> => {
     console.log(bearer);
     encoding.free();
 
-    const stream = await OpenAIStream(model, promptToSend, temperatureToUse, key, messagesToSend, principalName, bearer );
+    const stream = await OpenAIStream(model, promptToSend, temperatureToUse, key, messagesToSend, principalName, bearer, bearerAuth );
 
     return new Response(stream);
   } catch (error) {
