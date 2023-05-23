@@ -77,7 +77,8 @@ export const OpenAIStream = async (
     body: JSON.stringify(body),
   });
 
-  //console.log(JSON.stringify(header));
+  console.log("!!!Sending to APIM!!!")
+  console.log(JSON.stringify(header));
   //console.log(JSON.stringify(body));
 
   const encoder = new TextEncoder();
