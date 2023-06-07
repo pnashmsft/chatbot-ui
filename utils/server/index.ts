@@ -56,9 +56,6 @@ export const OpenAIStream = async (
       'x-ms-client-principal-name': principalName
     }),
     ...((bearer) && { 
-      'Authorization': 'Bearer ' + bearer
-    }),
-    ...((bearer) && { 
       'x-ms-client-principal': bearer
     }),
     ...((bearerAuth) && { 
