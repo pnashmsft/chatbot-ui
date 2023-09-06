@@ -34,18 +34,13 @@ docker build -t chatgpt-ui .
 docker run -e OPENAI_API_KEY=xxxxxxxx -p 3000:3000 chatgpt-ui
 ```
 
-Pull from ghcr:
-
-```
-docker run -e OPENAI_API_KEY=xxxxxxxx -p 3000:3000 ghcr.io/mckaywrigley/chatbot-ui:main
-```
 
 ## Running Locally
 
 **1. Clone Repo**
 
 ```bash
-git clone https://github.com/mckaywrigley/chatbot-ui.git
+git clone https://github.com/Patrick-Davis-MSFT/chatbot-ui.git
 ```
 
 **2. Install Dependencies**
