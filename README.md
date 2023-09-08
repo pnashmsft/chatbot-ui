@@ -118,12 +118,12 @@ If you don't have an OpenAI API key, you can get one [here](https://platform.ope
 1. Build the docker image locally `docker build -t azurechat-ui .`
 1. Push the image to the ACR `docker image push azurechat-ui`
 1. Go to the webapp and Update the following configuration parameters
-    * AZURE_APIM_KEY
-    * AZURE_DEPLOYMENT_ID
-    * OPENAI_API_HOST
-    * OPENAI_API_KEY
-    * OPENAI_API_TYPE
-    * NODE_TLS_REJECT_UNAUTHORIZED = Not needed if the backend certs are from a well known source
+    * AZURE_APIM_KEY (if using APIM to front AOAI)
+    * AZURE_DEPLOYMENT_ID (The name of the deployment in AOAI)
+    * OPENAI_API_HOST (The host URI for AOAI)
+    * OPENAI_API_KEY (Required to be not null and can be `false` if using AOAI through APIM otherwise use the AOAI API Key)
+    * OPENAI_API_TYPE = `azure` (Required for Azure)
+    * NODE_TLS_REJECT_UNAUTHORIZED = `0` (Not needed if the backend certs are from a source with a valid certificate)
 1. Go to the <i>Deployment Center</i>
 1. Set the settings to 
     * Source: Container Registry
@@ -134,7 +134,7 @@ If you don't have an OpenAI API key, you can get one [here](https://platform.ope
     * Registry: The container registry name created for this effort
     * Image: azurechat-ui
     * Tag: the appropriate tag
-    * Pull Image over VNET: best choice for your needs
+    * Pull Image over VNET: or the best choice for your needs
     * Continuous Deployment: Off
     * Webhook URL: Default Value
 
