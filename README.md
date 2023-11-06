@@ -116,6 +116,7 @@ If you don't have an OpenAI API key, you can get one [here](https://platform.ope
     * After setting this the user or groups need to be added to the <i>User and groups</i> list in the Enterprise Application under Azure Active Directory
 1. Login to the Azure Container Registry `docker login <container-url-lowercase>`
 1. Build the docker image locally `docker build -t azuregovchat-ui .`
+1. Tag the docker image locally `docker tag azuregovchat-ui [container-reg-name].azurecr.io/azuregovchat-ui`
 1. Push the image to the ACR `docker image push azuregovchat-ui`
 1. Go to the webapp and Update the following configuration parameters
     * AZURE_APIM_KEY (if using APIM to front AOAI)
