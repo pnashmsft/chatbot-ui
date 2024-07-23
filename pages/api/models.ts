@@ -1,6 +1,6 @@
 import { OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION, AZURE_APIM } from '@/utils/app/const';
-
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
+const { DefaultAzureCredential } = require('@azure/identity');
 
 export const config = {
   runtime: 'edge',
@@ -17,6 +17,13 @@ const handler = async (req: Request): Promise<Response> => {
       url = `${OPENAI_API_HOST}/openai/deployments?api-version=${OPENAI_API_VERSION}`;
     }
 
+    console.log("about to get the model credentials");
+    //to test we are always getting the token we need to change this
+    const credential = new DefaultAzureCredential();
+    // Get the access token
+    const token = await credential.getToken("https://cognitiveservices.azure.com/.default");
+    console.log("auth token:"+token);  
+
     console.log("load the models: " + url) ;
     console.log("model headers");
     console.log(req.headers);
@@ -28,8 +35,11 @@ const handler = async (req: Request): Promise<Response> => {
         ...(OPENAI_API_TYPE === 'openai' && {
           Authorization: `Bearer ${key ? key : process.env.OPENAI_API_KEY}`
         }),
-        ...(OPENAI_API_TYPE === 'azure' && {
+        ...(OPENAI_API_TYPE === 'azure' && process.env.AZURE_USE_MANAGED_IDENTITY=="false" && {
           'api-key': `${key ? key : process.env.OPENAI_API_KEY}`
+        }),
+        ...(OPENAI_API_TYPE === 'azure' && process.env.AZURE_USE_MANAGED_IDENTITY=="true" && {
+          Authorization: `Bearer ${token}`
         }),
         ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
           'OpenAI-Organization': OPENAI_ORGANIZATION,
