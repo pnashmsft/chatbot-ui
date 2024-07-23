@@ -8,12 +8,8 @@ class AzureCredentialManager {
   private constructor() {
     console.log("starting AzureCredentialManager constructor");
     // Define options for DefaultAzureCredential
-    const options: DefaultAzureCredentialOptions = {
-      // Explicitly specify the credential types to use
-      credentials: [new VisualStudioCodeCredential(), new AzureCliCredential()],
-    };
 
-    this.credential = new DefaultAzureCredential(options);
+    this.credential = new DefaultAzureCredential();
     this.token = { token: "defaultTokenValue", expiresOnTimestamp: Date.now() + 1000 };
     console.log("finished AzureCredentialManager constructor");
   }
