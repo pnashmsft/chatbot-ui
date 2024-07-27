@@ -1,4 +1,7 @@
-import { AccessToken,DefaultAzureCredential, VisualStudioCodeCredential, AzureCliCredential, DefaultAzureCredentialOptions } from '@azure/identity';
+import { AccessToken,DefaultAzureCredential, VisualStudioCodeCredential, AzureCliCredential, DefaultAzureCredentialOptions, ChainedTokenCredential } from '@azure/identity';
+//import { azcredential } from './home/index';
+import { getServerSideProps } from './home';
+
 
 class AzureCredentialManager {
   private static instance: AzureCredentialManager;

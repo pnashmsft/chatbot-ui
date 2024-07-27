@@ -1,8 +1,6 @@
 import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
 import { OpenAIError, OpenAIStream } from '@/utils/server';
-
 import { ChatBody, Message } from '@/types/chat';
-import AzureCredentialManager from '../api/AzureCredentialManager'; // Adjust the path based on your directory structure
 
 // @ts-expect-error
 import wasm from '../../node_modules/@dqbd/tiktoken/lite/tiktoken_bg.wasm?module';
@@ -10,9 +8,11 @@ import wasm from '../../node_modules/@dqbd/tiktoken/lite/tiktoken_bg.wasm?module
 import tiktokenModel from '@dqbd/tiktoken/encoders/cl100k_base.json';
 import { Tiktoken, init } from '@dqbd/tiktoken/lite/init';
 
-export const config = {
-  runtime: 'edge',
-};
+console.log("starting")
+
+ export const config = {
+   runtime: 'edge',
+ };
 
 const handler = async (req: Request): Promise<Response> => {
   try {
@@ -59,19 +59,6 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("bearer:" + bearer);
     encoding.free();
 
-
-    if (typeof window === 'undefined')
-    {
-      console.log("I think I'm on the server");
-
-      console.log("chat.ts about to get credential");
-      const azureCredentialManager = await AzureCredentialManager.getInstance();
-      const credtoken = azureCredentialManager.token; // Use the token
-      console.log("chat.ts auth token:"+ credtoken);      
-      // Get the access token
-      //const token = await credential.getToken("https://cognitiveservices.azure.com/.default");
-      //console.log("chat.ts auth token:"+token); 
-    }
 
     const stream = await OpenAIStream(model, promptToSend, temperatureToUse, key, messagesToSend, principalName, bearer, bearerAuth );
 

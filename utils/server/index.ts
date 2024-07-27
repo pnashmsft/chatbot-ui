@@ -2,13 +2,14 @@ import { Message } from '@/types/chat';
 import { OpenAIModel } from '@/types/openai';
 
 import { AZURE_DEPLOYMENT_ID, OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION, AZURE_APIM } from '../app/const';
-import { DefaultAzureCredential } from "@azure/identity";
+
 
 import {
   ParsedEvent,
   ReconnectInterval,
   createParser,
 } from 'eventsource-parser';
+import { getAuthToken } from '../lib/azure';
 
 export class OpenAIError extends Error {
   type: string;
@@ -40,12 +41,11 @@ export const OpenAIStream = async (
     console.log(url);
   }
   console.log("about to get credential");
-  //to test we are always getting the token we need to change this
-  const credential = new DefaultAzureCredential();
-  console.log("credential: " + credential);
-  // Get the access token
-  const token = await credential.getToken("https://cognitiveservices.azure.com/.default");
-  console.log("auth token:"+token); 
+  //let token = getCache("cachedToken");
+  //console.log("auth token:",token); 
+  //let token = process.env.AUTH_TOKEN ? JSON.parse(process.env.AUTH_TOKEN) : '';
+  let token = await getAuthToken();
+  console.log("auth token:",token); 
 
   const header = {
     'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const OpenAIStream = async (
       'api-key': `${key ? key : process.env.OPENAI_API_KEY}`
     }),
     ...(OPENAI_API_TYPE === 'azure' && process.env.AZURE_USE_MANAGED_IDENTITY=="true" && {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token.token}`
     }),
     ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
       'OpenAI-Organization': OPENAI_ORGANIZATION,
