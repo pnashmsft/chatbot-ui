@@ -1,6 +1,6 @@
 import { OPENAI_API_HOST, OPENAI_API_TYPE, OPENAI_API_VERSION, OPENAI_ORGANIZATION, AZURE_APIM } from '@/utils/app/const';
 import { OpenAIModel, OpenAIModelID, OpenAIModels } from '@/types/openai';
-import { getCache } from '@/utils/lib/cache';
+import { getAuthToken } from '@/utils/lib/azure';
 
 export const config = {
   runtime: 'edge',
@@ -20,8 +20,8 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("models.ts - about to get the model credentials");
     //to test we are always getting the token we need to change this
     //const credential = getAzureCredential();
-    const authtoken = getCache("cachedToken");
-    console.log("auth token:"+authtoken);  
+    let token = await getAuthToken();
+    //console.log("auth token:"+to);  
 
     console.log("load the models: " + url) ;
     console.log("model headers");
@@ -38,7 +38,7 @@ const handler = async (req: Request): Promise<Response> => {
           'api-key': `${key ? key : process.env.OPENAI_API_KEY}`
         }),
         ...(OPENAI_API_TYPE === 'azure' && process.env.AZURE_USE_MANAGED_IDENTITY=="true" && {
-          Authorization: `Bearer ${authtoken}`
+          Authorization: `Bearer ${token.token}`
         }),
         ...((OPENAI_API_TYPE === 'openai' && OPENAI_ORGANIZATION) && {
           'OpenAI-Organization': OPENAI_ORGANIZATION,
